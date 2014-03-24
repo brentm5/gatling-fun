@@ -16,10 +16,14 @@ class LoadTimes extends Simulation {
     .acceptEncodingHeader("gzip, deflate")
     .disableFollowRedirect
 
-  val scn = scenario("Test Page Load Times")
-            .exec(http("Get API Hello World")
-              .get("/api/hello"))
+  val scn = scenario("Test Sample APi Times")
+              .exec(http("Get Hello World")
+                .get("/api/hello")
+                .check(status.is(200)))
+              .exec(http("Longer waits")
+                .get("/api/error")
+                .check(status.is(500)))
 
-  setUp(scn.inject(constantRate(13 usersPerSec) during (30 seconds)))
+  setUp(scn.inject(constantRate(15 usersPerSec) during (15 seconds)))
     .protocols(httpProtocol)
 }
